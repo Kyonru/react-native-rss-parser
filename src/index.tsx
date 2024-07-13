@@ -2,6 +2,7 @@ import { DOMParser } from 'xmldom';
 import * as rssV2Parser from './parsers/rssv2';
 import * as atomV1Parser from './parsers/atomv1';
 import type { Rss } from './models/rss';
+import { xmlToJson } from './parsers/json';
 export type {
   Link,
   Author,
@@ -37,6 +38,12 @@ const getParser = (document: Document): Parser | null => {
   }
 
   return null;
+};
+
+export const parseToJson = (xmlString: string) => {
+  const parser = new DOMParser();
+  const xmlDoc = parser.parseFromString(xmlString, 'text/xml');
+  return xmlToJson(xmlDoc);
 };
 
 export const parse = async (feed: string): Promise<Rss> =>
